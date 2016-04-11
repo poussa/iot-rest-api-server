@@ -2,7 +2,6 @@ var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 var util = require('util');
-var systemd = require('systemd');
 var device = require('iotivity-node')();
 var http, https, fs = null;
 var argv = require('minimist')(process.argv.slice(2));
@@ -76,7 +75,12 @@ app.use('/api/system', systemRouter);
 oicRouter = require('./routes/oicRoutes')(device);
 app.use('/api/oic', oicRouter);
 
-port = process.env.LISTEN_PID > 0 ? 'systemd' : port;
+// systemd socket activation support
+if (process.env.LISTEN_FDS) {
+    // The first passed file descriptor is fd 3
+    var fdStart = 3;
+    port = {fd: fdStart};
+}
 
 if (argv.s == true || argv.https == true) {
   https.createServer(httpsOptions, app).listen(port);
