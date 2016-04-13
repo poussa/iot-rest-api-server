@@ -1,92 +1,82 @@
-var express = require('express');
 var path = require('path');
-var bodyParser = require('body-parser');
-var util = require('util');
-var device = require('iotivity-node')();
-var http, https, fs = null;
-var argv = require('minimist')(process.argv.slice(2));
+var server = require("./server");
+var ocf = require("./handlers/ocfHandler");
+var system = require("./handlers/systemHandler");
+var fs = null;
+var args = process.argv.slice(2);
+var options = {
+    help: false,
+    verbose: false,
+    https: false,
+    port: 8000,
+    cors: false
+};
 
 const usage = "usage: node index.js [options]\n" +
 "options: \n" +
 "  -h, --help \n" +
 "  -v, --verbose \n" +
 "  -p, --port <number>\n" +
-"  -s, --https \n";
+"  -s, --https \n" +
+"  -c, --cors \n";
 
-if (argv.h == true || argv.help == true) {
-  console.log(usage);
-  return;
+for (var i = 0; i < args.length; i++) {
+    var arg = args[i];
+
+    switch(arg) {
+        case '-h':
+        case '--help':
+            options.help = true;
+            break;
+        case '-v':
+        case '--verbose':
+            options.verbose = true;
+            break;
+        case '-s':
+        case '--https':
+            options.https = true;
+            break;
+        case '-p':
+        case '--port':
+            var num = args[i + 1];
+            if (typeof num == 'undefined') {
+                console.log(usage);
+                process.exit(0);
+            }
+            options.port = parseInt(num);
+            break;
+        case '-c':
+        case '--cors':
+            options.cors = true;
+            break;
+    }
 }
 
-var port = 8000; /* default port */
-if (typeof argv.p != "undefined")
-  port = argv.p;
-else if (typeof argv.port != "undefined")
-  port = argv.port;
-
-if (Number.isInteger(port) == false) {
-  console.log(usage);
-  return;
+if (options.help == true) {
+    console.log(usage);
+    process.exit(0);
 }
 
-var appfw = "";
-try {
-  appfw = require('./appfw/appfw');
-}
-catch (e) {
-  if (argv.v == true || argv.verbose == true)
-    console.log("No AppFW module: " + e.message);
+if (Number.isInteger(options.port) == false) {
+    console.log(usage);
+    process.exit(0);
 }
 
-if (argv.s == true || argv.https == true) {
-  fs = require('fs');
-  https = require('https');
-
-  var httpsOptions = {
-    key: fs.readFileSync(path.join(__dirname, 'config', 'private.key')),
-    cert: fs.readFileSync(path.join(__dirname, 'config', 'certificate.pem'))
-  };
-}
-else {
-  http = require('http');
+var httpsOptions = {key: null, cert: null};
+if (options.https == true) {
+    fs = require('fs');
+    httpsOptions.key = fs.readFileSync(path.join(__dirname, 'config', 'private.key'));
+    httpsOptions.cert = fs.readFileSync(path.join(__dirname, 'config', 'certificate.pem'));
 }
 
-var app = express();
-
-// Allow cross origin requests
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(bodyParser.json());
-
-appRouter = require('./routes/appRoutes')(appfw);
-app.use('/api/apps', appRouter);
-
-installRouter = require('./routes/installRoutes')(appfw);
-app.use('/api/install', installRouter);
-
-systemRouter = require('./routes/systemRoutes')();
-app.use('/api/system', systemRouter);
-
-oicRouter = require('./routes/oicRoutes')(device);
-app.use('/api/oic', oicRouter);
+server.use("/api/oic", ocf);
+server.use("/api/system", system);
 
 // systemd socket activation support
 if (process.env.LISTEN_FDS) {
     // The first passed file descriptor is fd 3
     var fdStart = 3;
-    port = {fd: fdStart};
+    options.port = {fd: fdStart};
 }
 
-if (argv.s == true || argv.https == true) {
-  https.createServer(httpsOptions, app).listen(port);
-  console.log('Running on https PORT: ' + port);
-}
-else {
-  http.createServer(app).listen(port);
-  console.log('Running on PORT: ' + port);
-}
+server.start(options, httpsOptions);

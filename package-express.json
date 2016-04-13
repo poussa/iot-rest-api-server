@@ -1,6 +1,6 @@
 {
   "name": "iot-rest-api-server",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "REST API Server for IoT",
   "repository": "https://github.com:01org/iot-rest-api-server",
   "main": "index.js",
@@ -10,7 +10,10 @@
   "author": "Sakari Poussa",
   "license": "Apache-2.0",
   "dependencies": {
-    "iotivity-node": "^1.0.1-1"
+    "body-parser": "^1.12.4",
+    "express": "^4.12.3",
+    "iotivity-node": "^1.0.1-1",
+    "minimist": "^1.2.0"
   },
   "devDependencies": {
     "gulp": "^3.8.11",
