@@ -19,7 +19,7 @@ function route(routes, req, res) {
     if (typeof handler === 'function')
         handler(req, res);
     else {
-        var msg = "No request handler for " + pathname;
+        var msg = "No request handler for " + info.pathname;
         console.log(msg);
         res.writeHead(500, {'Content-Type': 'text/plain'});
         res.end(msg);
