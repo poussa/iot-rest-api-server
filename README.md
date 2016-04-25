@@ -54,9 +54,9 @@ The recomemnded way to use the https is to get proper certificate from know cert
 
 ## API End Points
 
-/api/system
+`/api/system`
 
-/api/oic
+`/api/oic`
 
 ## API documentation
 
@@ -72,7 +72,7 @@ For example
 
  ```raml2html doc/oic.wk.res.raml > oic-res.html```
 
-The ```.html``` file can be then opened by a browser. The ```.html```file contains the full documentation of the REST API including all the REST methods (GET, POST, DELETE, etc) supported, query parameters (like ?id=foo) and the JSON formats in each API.
+The `.html` file can be then opened by a browser. The `.html` file contains the full documentation of the REST API including all the REST methods (GET, POST, DELETE, etc) supported, query parameters (like ?id=foo) and the JSON formats in each API.
 
 ## Examples
 
@@ -80,11 +80,11 @@ The following examples assumes your IoT OS enabled device runs on IP address: 19
 
 Get the system status:
 
-http://192.168.0.1:8000/api/system
+`http://192.168.0.1:8000/api/system`
 
 Discover all the OIC enabled devices on the local network:
 
-http://192.168.0.1:8000/api/oic/res
+`http://192.168.0.1:8000/api/oic/res`
 
 See the more detailed API documentation in the chapter above.
 
@@ -94,9 +94,9 @@ The [test](https://github.com/01org/iot-rest-api-server/tree/master/test) direct
 
 ### oic-get
 
-Send HTTP GET to ```/api/oic```endpoint. Environment variables API_SERVER_HOST and API_SERVER_PORT are used to construct the authority part of the URL.
+Send HTTP GET to `/api/oic` endpoint. Environment variables API_SERVER_HOST and API_SERVER_PORT are used to construct the authority part of the URL.
 
-````
+```
 export API_SERVER_HOST=10.211.55.3
 # Discover
 ./test/oic-get /res
@@ -108,9 +108,9 @@ export API_SERVER_HOST=10.211.55.3
 
 ### oic-put
 
-Send HTTP PUT to ```/api/oic```endpoint. Environment variables API_SERVER_HOST and API_SERVER_PORT are used to construct the authority part of the URL. First parameter is ``ùri``` from the discover (```/res```) and second is JASON files with the properties that are being set.
+Send HTTP PUT to `/api/oic` endpoint. Environment variables API_SERVER_HOST and API_SERVER_PORT are used to construct the authority part of the URL. First parameter is `uri` from the discover (`/res`) and second is JASON files with the properties that are being set.
 
-````
+```
 API_SERVER_HOST=10.211.55.3
 ./test/oic-put  <href>?di=<di> <file-name-for-body>
 ```
