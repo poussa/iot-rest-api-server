@@ -76,7 +76,7 @@ The `.html` file can be then opened by a browser. The `.html` file contains the 
 
 ## Examples
 
-The following examples assumes your IoT OS enabled device runs on IP address: 192.168.0.1
+The following examples assumes the iot-rest-api-server runs on IP address: 192.168.0.1, port 8000.
 
 Get the system status:
 
