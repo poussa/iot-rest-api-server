@@ -1,9 +1,9 @@
 var OIC = require('../oic/oic');
-var DEV = require('iotivity-node')();
+var DEV = require('iotivity-node')("client");
 
 const RESOURCE_FOUND_EVENT = "resourcefound";
 const RESOURCE_CHANGE_EVENT = "resourcechange";
-const UPDATE_EVENT = "update";
+const CHANGE_EVENT = "change";
 const DEVICE_FOUND_EVENT = "devicefound";
 
 const timeoutValue = 5000; // 5s
@@ -17,11 +17,6 @@ const notFoundStatusCode = 404; // Not found
 
 var discoveredResources = [];
 var discoveredDevices = [];
-
-DEV.configure({
-    role: "client",
-    connectionMode: "acked"
-});
 
 var routes = function(req, res) {
 
@@ -120,18 +115,18 @@ var routes = function(req, res) {
                 var json = OIC.parseResource(event.resource);
                 res.write(json);
             } else {
-                event.resource.removeEventListener(UPDATE_EVENT, observer);
+                event.resource.removeEventListener(CHANGE_EVENT, observer);
             }
         }
 
-        DEV.retrieveResource({deviceId: req.query.di, path: req.path}).then(
+        DEV.retrieve({deviceId: req.query.di, path: req.path}).then(
             function(resource) {
                 if (req.query.obs != "undefined" && req.query.obs == true) {
                     req.on('close', function() {
                         console.log("Client: close");
                         req.query.obs = false;
                     });
-                    resource.addEventListener(UPDATE_EVENT, observer);
+                    resource.addEventListener(CHANGE_EVENT, observer);
                 } else {
                     var json = OIC.parseResource(resource);
                     res.writeHead(okStatusCode, {'Content-Type':'application/json'});
@@ -167,7 +162,7 @@ var routes = function(req, res) {
                 properties: JSON.parse(body)
             };
             console.log("PUT %s: %s", req.originalUrl, JSON.stringify(resource));
-            DEV.updateResource(resource).then(
+            DEV.update(resource).then(
                 function() {
                     res.statusCode = noContentStatusCode;
                     res.end();
