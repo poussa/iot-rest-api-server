@@ -4,58 +4,85 @@ var proto = null;
 var path = require('path');
 var fs = require('fs');
 var ca = null;
-var argv = require('minimist')(process.argv.slice(2));
+var args = process.argv.slice(2);
+var options = {
+    help: false,
+    host: "localhost",
+    port: 8000,
+    https: false,
+    obs: false
+};
 
 const usage = "usage: node oic-api-tester.js [options]\n" +
 "options: \n" +
 "  -?, --help \n" +
-"  -v, --verbose \n" +
 "  -h, --host <string>\n" +
 "  -p, --port <number>\n" +
 "  -s, --https \n" +
 "  -o, --obs \n";
 
-if (argv.h == true || argv.help == true) {
-  console.log(usage);
-  return;
+for (var i = 0; i < args.length; i++) {
+    var arg = args[i];
+
+    switch(arg) {
+        case '-?':
+        case '--help':
+            options.help = true;
+            break;
+        case '-h':
+        case '--host':
+            var host = args[i + 1];
+            if (typeof host == 'undefined') {
+                console.log(usage);
+                return;
+            }
+            options.host = host;
+            break;
+        case '-p':
+        case '--port':
+            var num = args[i + 1];
+            if (typeof num == 'undefined') {
+                console.log(usage);
+                return;
+            }
+            options.port = parseInt(num);
+            break;
+        case '-s':
+        case '--https':
+            options.https = true;
+            break;
+        case '-o':
+        case '--obs':
+            options.obs = true;
+            break;
+    }
 }
 
-var obs = false;
-if (argv.o == true || argv.obs == true)
-	obs = true
-
-var port = 8000; /* default port */
-if (typeof argv.p != "undefined")
-  port = argv.p;
-else if (typeof argv.port != "undefined")
-  port = argv.port;
-
-if (Number.isInteger(port) == false) {
-  console.log(usage);
-  return;
+if (options.help == true) {
+    console.log(usage);
+    return;
 }
 
-var host = "localhost"; /* default host */
-if (typeof argv.h != "undefined")
-  host = argv.h;
-else if (typeof argv.host != "undefined")
-  host = argv.host;
-
-if (typeof host != "string") {
-  console.log(usage);
-  return;
+if (Number.isInteger(options.port) == false) {
+    console.log(usage);
+    return;
 }
 
-if (argv.s == true || argv.https == true) {
-	ca = fs.readFileSync(path.join(__dirname, '..', 'config', 'certificate.pem'))
-	proto = require('https');
+if (typeof options.host !== "string") {
+    console.log(usage);
+    return;
+}
+
+if (options.https == true) {
+    ca = fs.readFileSync(path.join(__dirname, '..', 'config', 'certificate.pem'));
+    proto = require('https');
 }
 else
 	proto = require('http');
 
 var reqOptions = {
-	host: host,
-	port: port,
+	host: options.host,
+	port: options.port,
 	agent: new proto.Agent({keepAlive: true}),
 	headers: {Connection: "keep-alive"},
 	ca: ca
@@ -89,13 +116,13 @@ function onResourceFound(resources) {
 	for (var i = 0; i < resources.length; i++) {
 		var uri = resources[i].links[0].href;
 		console.log("%s : %s", resources[i].di, uri);
-		retrieveResources(uri + "?di=" + resources[i].di, onResource, obs)
+		retrieveResources(uri + "?di=" + resources[i].di, onResource, options.obs);
 	}
 }
 
 function onResource(resource) {
 	console.log("--- onResource:");
-	console.log(resource)
+	console.log(resource);
 }
 
 function retrieveResources(uri, callback, observe) {
