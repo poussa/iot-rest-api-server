@@ -126,6 +126,7 @@ var routes = function(req, res) {
                         console.log("Client: close");
                         req.query.obs = false;
                     });
+                    res.writeHead(okStatusCode, {'Content-Type':'application/json'});
                     resource.addEventListener(CHANGE_EVENT, observer);
                 } else {
                     var json = OIC.parseResource(resource);
