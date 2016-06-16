@@ -5,6 +5,7 @@ const RESOURCE_FOUND_EVENT = "resourcefound";
 const RESOURCE_CHANGE_EVENT = "resourcechange";
 const CHANGE_EVENT = "change";
 const DEVICE_FOUND_EVENT = "devicefound";
+const PLATFORM_FOUND_EVENT = "platformfound";
 
 const timeoutValue = 5000; // 5s
 const timeoutStatusCode = 504; // Gateway Timeout
@@ -17,6 +18,7 @@ const notFoundStatusCode = 404; // Not found
 
 var discoveredResources = [];
 var discoveredDevices = [];
+var discoveredPlatforms = [];
 
 var routes = function(req, res) {
 
@@ -25,7 +27,7 @@ var routes = function(req, res) {
     else if (req.path == '/d')
         discoverDevices(req, res);
     else if (req.path == '/p')
-        notSupported(req, res);
+        discoverPlatforms(req, res);
     else {
         if (req.method == "GET")
             handleResourceGet(req, res);
@@ -45,6 +47,11 @@ var routes = function(req, res) {
     function onDeviceFound(event) {
         var device = OIC.parseDevice(event);
         discoveredDevices.push(device);
+    }
+
+    function onPlatformFound(event) {
+        var platform = OIC.parsePlatform(event);
+        discoveredPlatforms.push(platform);
     }
 
     function notSupported(req, res) {
@@ -92,6 +99,28 @@ var routes = function(req, res) {
         DEV.findDevices().then(function() {
             // TODO: should we send in-progress back to http-client
             console.log("findDevices() successful");
+        })
+        .catch(function(e) {
+            res.writeHead(internalErrorStatusCode, {'Content-Type':'text/plain'})
+            res.end("Error: " + e.message);
+        });
+    }
+
+    function discoverPlatforms(req, res) {
+        res.setTimeout(timeoutValue, function() {
+            DEV.removeEventListener(PLATFORM_FOUND_EVENT, onPlatformFound);
+            res.writeHead(okStatusCode, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify(discoveredPlatforms));
+        });
+
+        console.log("%s %s", req.method, req.url);
+
+        discoveredPlatforms.length = 0;
+        DEV.addEventListener(PLATFORM_FOUND_EVENT, onPlatformFound);
+
+        console.log("Discovering platforms for %d seconds.", timeoutValue/1000);
+        DEV.findPlatforms().then(function() {
+            console.log("findPlatforms() successful");
         })
         .catch(function(e) {
             res.writeHead(internalErrorStatusCode, {'Content-Type':'text/plain'})
