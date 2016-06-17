@@ -50,14 +50,14 @@ exports.parseDevice = function(payload) {
   return o;
 }
 
-exports.parseP = function(payload) {
+exports.parsePlatform = function(platformInfo) {
   var o = {};
 
-  console.log(payload);
-  var info = payload.info;
+  console.log(platformInfo);
+  var info = platformInfo.platform;
 
-  if (typeof info.platformID != "undefined")
-    o.pi = info.platformID;
+  if (typeof info.id != "undefined")
+    o.pi = info.id;
 
   if (typeof info.manufacturerName != "undefined")
     o.mnmn = info.manufacturerName;
@@ -65,17 +65,17 @@ exports.parseP = function(payload) {
   if (typeof info.manufacturerUrl != "undefined")
     o.mnml = info.manufacturerUrl;
 
-  if (typeof info.modelNumber != "undefined")
-    o.mnmo = info.modelNumber;
+  if (typeof info.model != "undefined")
+    o.mnmo = info.model;
 
-  if (typeof info.dateOfManufacture != "undefined")
-    o.mndt = info.dateOfManufacture;
+  if (typeof info.manufactureDate != "undefined")
+    o.mndt = info.manufactureDate;
 
   if (typeof info.platformVersion != "undefined")
     o.mnpv = info.platformVersion;
 
-  if (typeof info.operatingSystemVersion != "undefined")
-    o.mnos = info.operatingSystemVersion;
+  if (typeof info.osVersion != "undefined")
+    o.mnos = info.osVersion;
 
   if (typeof info.hardwareVersion != "undefined")
     o.mnhw = info.hardwareVersion;
@@ -89,10 +89,9 @@ exports.parseP = function(payload) {
   if (typeof info.systemTime != "undefined")
     o.st = info.systemTime;
 
-  var json = JSON.stringify(o);
-  console.log(json);
+  console.log(JSON.stringify(o));
 
-  return json;
+  return o;
 }
 
 exports.parseIP = function(addr) {
