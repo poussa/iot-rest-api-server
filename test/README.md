@@ -3,67 +3,10 @@
 
 * `API_SERVER_HOST` - Hostname/address where API server is running
   (default: localhost)
-* `API_SERVER_HOST` - Port where API server is running (default: 8000)
-* `API_REQUEST_METHOD` - HTTP method (GET/POST/DELETE/PUT) in the request header
-  (default: GET)
+* `API_SERVER_PORT` - Port where API server is running (default: 8000)
+* `API_SERVER_HTTPS` - To use https instead of http (default: http)
 
 ## Examples
-
-### app-install
-
-```sh
-# List all installed applications (GET /install)
-./app-installer GET /
-
-# List single installed application (GET /install/{appId})
-./app-installer GET '/terminal:x'
-
-# Update all installed applications (POST /install)
-./app-installer POST /
-
-# Update single application (POST /install/{appId})
-./app-installer POST '/terminal:x'
-
-# Uninstall all installed applications (DELETE /install)
-./app-installer DELETE /
-
-# Uninstall single installed application (DELETE /install/{appId})
-./app-installer DELETE '/terminal:x'
-
-# Reinstall all installed applications (POST /install)
-./app-installer PUT /
-
-# Reinstall single installed application (POST /install/{appId})
-./app-installer PUT '/terminal:x'
-```
-
-### app-launcher
-
-```sh
-# List all running applications (GET /apps)
-./app-launcher GET /
-
-# List single running application (GET /apps/{appId})
-./app-launcher GET '/terminal:x'
-
-# Start all installed applications (POST /apps)
-./app-launcher POST /
-
-# Start single application (POST /apps/{appId})
-./app-launcher POST '/terminal:x'
-
-# Stop all running applications (DELETE /apps)
-./app-launcher DELETE /
-
-# Stop single running application (DELETE /apps/{appId})
-./app-launcher DELETE '/terminal:x'
-
-# Restart all running applications (POST /apps)
-./app-launcher PUT /
-
-# Restart single running application (POST /apps/{appId})
-./app-launcher PUT '/terminal:x'
-```
 
 ### oic-get
 
@@ -77,19 +20,19 @@
 # Platform discovery (/oic/p)
 ./oic-get "/p"
 
-# Resource get (/a/light)
-./oic-get "/a/light"
+# Resource get (/a/light?di=<Device ID>)
+./oic-get "/a/light?di=<di>"
 
-# Resource get with query filter (/a/light with power less than 50)
-./oic-get "/a/light?power<50"
+# Resource get with query filter (/a/light?di=<Device ID> with power less than 50)
+./oic-get "/a/light?di=?di=<di>&power<50"
 
-# Resource observe (/a/light)
-./oic-get "/a/light;obs"
+# Resource observe (/a/light?di=<Device ID>&obs=1)
+./oic-get "/a/light?di=<di>&obs=1"
 ```
 
 ### oic-put
 
 ```sh
-# Resource put (/a/light from a file: put-light-values.txt)
-./oic-put "/a/light"
+# Resource put (/a/light?di=<Device ID> from a file: put-light-values.txt)
+./oic-put "/a/light?di=<di>"
 ```

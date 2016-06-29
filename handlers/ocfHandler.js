@@ -2,8 +2,7 @@ var OIC = require('../oic/oic');
 var DEV = require('iotivity-node')("client");
 
 const RESOURCE_FOUND_EVENT = "resourcefound";
-const RESOURCE_CHANGE_EVENT = "resourcechange";
-const CHANGE_EVENT = "change";
+const RESOURCE_CHANGE_EVENT = "change";
 const DEVICE_FOUND_EVENT = "devicefound";
 const PLATFORM_FOUND_EVENT = "platformfound";
 
@@ -132,19 +131,19 @@ var routes = function(req, res) {
 
         if (typeof req.query.di == "undefined") {
             res.writeHead(badRequestStatusCode, {'Content-Type':'text/plain'})
-            res.end("Query parameter \"id\" is missing.");
+            res.end("Query parameter \"di\" is missing.");
             return;
         }
         console.log("%s %s (fd: %d)", req.method, req.url, req.socket._handle.fd);
 
         function observer(event) {
             var fd = (res.socket._handle == null) ? -1 : res.socket._handle.fd;
-            console.log("obs: %d, fin: %s, id: %s, fd: %d",req.query.obs, res.finished, req.query.di, fd);
+            console.log("obs: %d, fin: %s, di: %s, fd: %d",req.query.obs, res.finished, req.query.di, fd);
             if (req.query.obs == true && res.finished == false) {
                 var json = OIC.parseResource(event.resource);
                 res.write(json);
             } else {
-                event.resource.removeEventListener(CHANGE_EVENT, observer);
+                event.resource.removeEventListener(RESOURCE_CHANGE_EVENT, observer);
             }
         }
 
@@ -156,7 +155,7 @@ var routes = function(req, res) {
                         req.query.obs = false;
                     });
                     res.writeHead(okStatusCode, {'Content-Type':'application/json'});
-                    resource.addEventListener(CHANGE_EVENT, observer);
+                    resource.addEventListener(RESOURCE_CHANGE_EVENT, observer);
                 } else {
                     var json = OIC.parseResource(resource);
                     res.writeHead(okStatusCode, {'Content-Type':'application/json'});
@@ -173,7 +172,7 @@ var routes = function(req, res) {
     function handleResourcePut(req, res) {
         if (typeof req.query.di == "undefined") {
             res.writeHead(badRequestStatusCode, {'Content-Type':'text/plain'})
-            res.end("Query parameter \"id\" is missing.");
+            res.end("Query parameter \"di\" is missing.");
             return;
         }
 

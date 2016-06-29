@@ -1,6 +1,6 @@
 # IoT REST API Server
 ## Description
-This project provides node.js based REST API server accoring to the  OIC (Open Interconnect) core specification. 
+This project provides node.js based REST API server according to the  OIC (Open Interconnect) core specification.
 
 The project is experimental at the moment and APIs provided are work in progress and subject to changes.
 
@@ -37,7 +37,7 @@ Options
 #### verbose
 More verbose logging
 #### port 
-Listen to specifc port. Default is 8000
+Listen to specific port. Default is 8000
 #### https
 Use https with TLS instead of plain http. In order to use https the `config` directory needs to contain the following certificate and private key files (in PEM format)
 
@@ -46,9 +46,9 @@ certificate.pem
 private.key
 ```
 
-You can use the `config/generate-key-and-cert.sh` to generate the files for testing only purposes. The certificate is self signed and browsers do not regognise it so you will get warnings. 
+You can use the `config/generate-key-and-cert.sh` to generate the files for testing only purposes. The certificate is self signed and browsers do not recognise it so you will get warnings.
 
-The recomemnded way to use the https is to get proper certificate from know certificate authority and corresponding private key and place those to the `config` directory.
+The recommended way to use the https is to get proper certificate from know certificate authority and corresponding private key and place those to the `config` directory.
 
 ## API End Points
 
@@ -124,6 +124,6 @@ Performs the OIC discovery. On discovered resources performs a) GET or b) OBSERV
 
 ## Tips
 
-If you are running Chrome and want to see the JSON objects in nicely formated way, install the JSONView extension.
+If you are running Chrome and want to see the JSON objects in nicely formatted way, install the JSONView extension.
 
 Another great tool for REST API development and testing is Postman, another Chrome extension.

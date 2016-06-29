@@ -94,13 +94,6 @@ exports.parsePlatform = function(platformInfo) {
   return o;
 }
 
-exports.parseIP = function(addr) {
-  var result = "";
-  for (var i=0; i < addr.length && addr[i] != 0; i++)
-    result += String.fromCharCode(addr[i]);
-  return result;
-}
-
 exports.parseResource = function(payload) {
   var o = {};
 
