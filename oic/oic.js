@@ -95,6 +95,7 @@ exports.parsePlatform = function(info) {
 
 exports.parseResource = function(payload) {
   var o = {};
+  var index, property;
 
   console.log(payload);
 
@@ -102,7 +103,10 @@ exports.parseResource = function(payload) {
     o.href = payload.uri;
 
   if (typeof payload.properties != "undefined")
-    o.properties = payload.properties;
+    for (index in payload.properties) {
+      value = payload.properties[index];
+      o[index] = value;
+    }
 
   var json = JSON.stringify(o);
 
