@@ -58,7 +58,7 @@ The recommended way to use the https is to get proper certificate from know cert
 
 ## API documentation
 
-The REST APIs are documented in the /doc folder using the [RAML](http://raml.org/) modeling language. You also need the ```raml2html```node module to produce the documentation:
+The REST APIs are documented in the [doc](./doc/) folder using the [RAML](http://raml.org/) modeling language. You also need the ```raml2html```node module to produce the documentation:
 
 ```npm install -g raml2html```
 
@@ -88,7 +88,7 @@ See the more detailed API documentation in the chapter above.
 
 ## Tests
 
-The [test](https://github.com/01org/iot-rest-api-server/tree/master/test) directory contains the following small test utilities:
+The [test](./test/) directory contains the following small test utilities:
 
 ### oic-get
 
