@@ -147,7 +147,7 @@ var routes = function(req, res) {
             }
         }
 
-        DEV.retrieve({deviceId: req.query.di, path: req.path}).then(
+        DEV.retrieve({deviceId: req.query.di, path: req.path}, req.query).then(
             function(resource) {
                 if (req.query.obs != "undefined" && req.query.obs == true) {
                     req.on('close', function() {
