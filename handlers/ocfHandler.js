@@ -19,6 +19,15 @@ var discoveredResources = [];
 var discoveredDevices = [];
 var discoveredPlatforms = [];
 
+// Turn on global presence listening
+DEV.subscribe().then(
+    function() {
+        console.log("Subscribed for the presence notifications.");
+    },
+    function(error) {
+        console.log("device.subscribe() failed with: ", error);
+    });
+
 var routes = function(req, res) {
 
     if (req.path == '/res')
