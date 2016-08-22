@@ -3,6 +3,7 @@ var DEV = require('iotivity-node')("client");
 
 const RESOURCE_FOUND_EVENT = "resourcefound";
 const RESOURCE_CHANGE_EVENT = "change";
+const RESOURCE_DELETE_EVENT = "delete";
 const DEVICE_FOUND_EVENT = "devicefound";
 const PLATFORM_FOUND_EVENT = "platformfound";
 
@@ -153,6 +154,14 @@ var routes = function(req, res) {
                 res.write(json);
             } else {
                 event.resource.removeEventListener(RESOURCE_CHANGE_EVENT, observer);
+                event.resource.removeEventListener(RESOURCE_DELETE_EVENT, deleteHandler);
+            }
+        }
+
+        function deleteHandler(event) {
+            console.log("Resource %s has been deleted", req.url);
+            if (req.query.obs == true && res.finished == false) {
+                res.end();
             }
         }
 
@@ -165,6 +174,7 @@ var routes = function(req, res) {
                     });
                     res.writeHead(okStatusCode, {'Content-Type':'application/json'});
                     resource.addEventListener(RESOURCE_CHANGE_EVENT, observer);
+                    resource.addEventListener(RESOURCE_DELETE_EVENT, deleteHandler);
                 } else {
                     var json = OIC.parseResource(resource);
                     res.writeHead(okStatusCode, {'Content-Type':'application/json'});
