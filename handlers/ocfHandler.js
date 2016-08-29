@@ -170,6 +170,8 @@ var routes = function(req, res) {
                 if (req.query.obs != "undefined" && req.query.obs == true) {
                     req.on('close', function() {
                         console.log("Client: close");
+                        resource.removeEventListener(RESOURCE_CHANGE_EVENT, observer);
+                        resource.removeEventListener(RESOURCE_DELETE_EVENT, deleteHandler);
                         req.query.obs = false;
                     });
                     res.writeHead(okStatusCode, {'Content-Type':'application/json'});
