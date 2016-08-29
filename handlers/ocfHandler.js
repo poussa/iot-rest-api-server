@@ -9,6 +9,7 @@ const PLATFORM_FOUND_EVENT = "platformfound";
 
 const timeoutValue = 5000; // 5s
 const timeoutStatusCode = 504; // Gateway Timeout
+const socketTimeoutValue = 0; // No timeout
 
 const okStatusCode = 200; // All right
 const noContentStatusCode = 204; // No content
@@ -175,6 +176,7 @@ var routes = function(req, res) {
                         req.query.obs = false;
                     });
                     res.writeHead(okStatusCode, {'Content-Type':'application/json'});
+                    req.setTimeout(socketTimeoutValue);
                     resource.addEventListener(RESOURCE_CHANGE_EVENT, observer);
                     resource.addEventListener(RESOURCE_DELETE_EVENT, deleteHandler);
                 } else {
