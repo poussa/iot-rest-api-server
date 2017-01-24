@@ -13,10 +13,12 @@ exports.parseRes = function(payload) {
     link.href = resource.id.path;
 
   // TODO: collect all ...
-  if (typeof resource.resourceTypes[0] != "undefined")
+  if (typeof resource.resourceTypes != "undefined" &&
+      typeof resource.resourceTypes[0] != "undefined")
     link.rt = resource.resourceTypes[0];
 
-  if (typeof resource.interfaces[0] != "undefined")
+  if (typeof resource.interfaces != "undefined" &&
+      typeof resource.interfaces[0] != "undefined")
     link.if = resource.interfaces[0];
 
   links.push(link);
