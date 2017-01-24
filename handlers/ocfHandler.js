@@ -93,6 +93,11 @@ var routes = function(req, res) {
             res.end(JSON.stringify(discoveredResources));
         });
 
+        res.on('close', function() {
+            console.log("Client: close");
+            DEV.removeEventListener(RESOURCE_FOUND_EVENT, onResourceFound);
+        });
+
         console.log("%s %s", req.method, req.url);
 
         discoveredResources.length = 0;
@@ -116,6 +121,11 @@ var routes = function(req, res) {
             res.end(JSON.stringify(discoveredDevices));
         });
 
+        res.on('close', function() {
+            console.log("Client: close");
+            DEV.removeEventListener(DEVICE_FOUND_EVENT, onDeviceFound);
+        });
+
         console.log("%s %s", req.method, req.url);
 
         discoveredDevices.length = 0;
@@ -137,6 +147,11 @@ var routes = function(req, res) {
             DEV.removeEventListener(PLATFORM_FOUND_EVENT, onPlatformFound);
             res.writeHead(okStatusCode, {'Content-Type': 'application/json'});
             res.end(JSON.stringify(discoveredPlatforms));
+        });
+
+        res.on('close', function() {
+            console.log("Client: close");
+            DEV.removeEventListener(PLATFORM_FOUND_EVENT, onPlatformFound);
         });
 
         console.log("%s %s", req.method, req.url);
