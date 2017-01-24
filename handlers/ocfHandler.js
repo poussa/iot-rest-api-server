@@ -17,10 +17,6 @@ const internalErrorStatusCode = 500; // Internal error
 const badRequestStatusCode = 400; // Bad request
 const notFoundStatusCode = 404; // Not found
 
-var discoveredResources = [];
-var discoveredDevices = [];
-var discoveredPlatforms = [];
-
 // Turn on global presence listening
 DEV.subscribe().then(
     function() {
@@ -31,6 +27,10 @@ DEV.subscribe().then(
     });
 
 var routes = function(req, res) {
+    var discoveredResources = [];
+    var discoveredDevices = [];
+    var discoveredPlatforms = [];
+    var index;
 
     if (req.path == '/res')
         discoverResources(req, res);
@@ -51,15 +51,31 @@ var routes = function(req, res) {
 
     function onResourceFound(event) {
         var resource = OIC.parseRes(event);
+        // Do not add resource to the list, if we have already seen it.
+        for (index in discoveredResources) {
+             if (JSON.stringify(resource) ===
+                 JSON.stringify(discoveredResources[index]))
+                 return;
+        }
         discoveredResources.push(resource);
     }
 
     function onDeviceFound(event) {
+        // Do not add device to the list, if we have already seen it.
+        for (index in discoveredDevices) {
+             if (event.device.uuid === discoveredDevices[index].di)
+                 return;
+        }
         var device = OIC.parseDevice(event);
         discoveredDevices.push(device);
     }
 
     function onPlatformFound(event) {
+        // Do not add platform to the list, if we have already seen it.
+        for (index in discoveredPlatforms) {
+             if (event.platform.id === discoveredPlatforms[index].pi)
+                 return;
+        }
         var platform = OIC.parsePlatform(event);
         discoveredPlatforms.push(platform);
     }
