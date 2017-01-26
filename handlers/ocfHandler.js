@@ -40,8 +40,8 @@ var routes = function(req, res) {
     else {
         if (req.method == "GET")
             handleResourceGet(req, res);
-        else if (req.method == "PUT")
-            handleResourcePut(req, res);
+        else if (req.method == "POST")
+            handleResourcePost(req, res);
         else {
             res.writeHead(badRequestStatusCode, {'Content-Type':'text/plain'});
             res.end("Unsupported method: " + req.method);
@@ -228,7 +228,7 @@ var routes = function(req, res) {
         );
     }
 
-    function handleResourcePut(req, res) {
+    function handleResourcePost(req, res) {
         if (typeof req.query.di == "undefined") {
             res.writeHead(badRequestStatusCode, {'Content-Type':'text/plain'})
             res.end("Query parameter \"di\" is missing.");

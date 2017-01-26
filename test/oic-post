@@ -23,7 +23,7 @@ else
 fi
 
 if test "x$2x" == "xx"; then
-  API_SERVER_FILE="put-light-values.json"
+  API_SERVER_FILE="post-light-values.json"
 else
   API_SERVER_FILE=$2
 fi
@@ -31,5 +31,5 @@ fi
 
 echo $API_SERVER_HOST":"$API_SERVER_PORT $API_SERVER_URL
 
-curl -X PUT --noproxy "*" -w "\nHTTP: %{http_code}\n" -H "Content-Type: application/json" -T ${API_SERVER_FILE} ${CERT} \
+curl -X POST --noproxy "*" -w "\nHTTP: %{http_code}\n" -H "Content-Type: application/json" -T ${API_SERVER_FILE} ${CERT} \
 ${API_SERVER_PROTO}://${API_SERVER_HOST}:${API_SERVER_PORT}/api/oic${API_SERVER_URL}

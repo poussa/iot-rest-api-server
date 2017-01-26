@@ -104,13 +104,13 @@ export API_SERVER_HOST=10.211.55.3
 ./test/oic-get <href>?di=<di>&obs=1
 ```
 
-### oic-put
+### oic-post
 
-Send HTTP PUT to `/api/oic` endpoint. Environment variables API_SERVER_HOST and API_SERVER_PORT are used to construct the authority part of the URL. First parameter is `uri` from the discover (`/res`) and second is JASON files with the properties that are being set.
+Send HTTP POST to `/api/oic` endpoint. Environment variables API_SERVER_HOST and API_SERVER_PORT are used to construct the authority part of the URL. First parameter is `uri` from the discover (`/res`) and second is JASON files with the properties that are being set.
 
 ```
 API_SERVER_HOST=10.211.55.3
-./test/oic-put  <href>?di=<di> <file-name-for-body>
+./test/oic-post  <href>?di=<di> <file-name-for-body>
 ```
 
 ### oic-api-tester

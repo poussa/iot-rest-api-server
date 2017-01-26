@@ -30,9 +30,9 @@
 ./oic-get "/a/light?di=<di>&obs=1"
 ```
 
-### oic-put
+### oic-post
 
 ```sh
-# Resource put (/a/light?di=<Device ID> from a file: put-light-values.txt)
-./oic-put "/a/light?di=<di>"
+# Resource post (/a/light?di=<Device ID> from a file: post-light-values.txt)
+./oic-post "/a/light?di=<di>"
 ```
