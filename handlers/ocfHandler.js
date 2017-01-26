@@ -4,6 +4,7 @@ var DEV = require('iotivity-node').client;
 const RESOURCE_FOUND_EVENT = "resourcefound";
 const RESOURCE_UPDATE_EVENT = "update";
 const RESOURCE_DELETE_EVENT = "delete";
+const RESOURCE_ERROR_EVENT = "error";
 const DEVICE_FOUND_EVENT = "devicefound";
 const PLATFORM_FOUND_EVENT = "platformfound";
 
@@ -16,6 +17,13 @@ const noContentStatusCode = 204; // No content
 const internalErrorStatusCode = 500; // Internal error
 const badRequestStatusCode = 400; // Bad request
 const notFoundStatusCode = 404; // Not found
+
+// Error handler
+function errorHandler(error) {
+    console.log("OCF server responded with error", error.message);
+}
+
+DEV.on("error", errorHandler);
 
 // Turn on global presence listening
 DEV.subscribe().then(
@@ -188,6 +196,7 @@ var routes = function(req, res) {
                 if (resource.observable)
                     resource.removeListener(RESOURCE_UPDATE_EVENT, observer);
                 resource.removeListener(RESOURCE_DELETE_EVENT, deleteHandler);
+                resource.removeListener(RESOURCE_ERROR_EVENT, errorHandler);
             }
         }
 
@@ -206,6 +215,7 @@ var routes = function(req, res) {
                         if (resource.observable)
                             resource.removeListener(RESOURCE_UPDATE_EVENT, observer);
                         resource.removeListener(RESOURCE_DELETE_EVENT, deleteHandler);
+                        resource.removeListener(RESOURCE_ERROR_EVENT, errorHandler);
                         req.query.obs = false;
                     });
                     res.writeHead(okStatusCode, {'Content-Type':'application/json'});
@@ -213,6 +223,7 @@ var routes = function(req, res) {
                     if (resource.observable)
                         resource.on(RESOURCE_UPDATE_EVENT, observer);
                      resource.on(RESOURCE_DELETE_EVENT, deleteHandler);
+                     resource.on(RESOURCE_ERROR_EVENT, errorHandler);
                 } else {
                     var json = OIC.parseResource(resource);
                     res.writeHead(okStatusCode, {'Content-Type':'application/json'});
