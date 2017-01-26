@@ -25,15 +25,6 @@ function errorHandler(error) {
 
 DEV.on("error", errorHandler);
 
-// Turn on global presence listening
-DEV.subscribe().then(
-    function() {
-        console.log("Subscribed for the presence notifications.");
-    },
-    function(error) {
-        console.log("device.subscribe() failed with: ", error);
-    });
-
 var routes = function(req, res) {
     var discoveredResources = [];
     var discoveredDevices = [];
