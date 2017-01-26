@@ -1,16 +1,15 @@
-exports.parseRes = function(payload) {
-  console.log(payload);
+exports.parseRes = function(resource) {
+  console.log(resource);
 
-  var resource = payload.resource;
   var o = {}; // resource object according to the OIC core spec.
   var link = {};
   var links = [];
 
-  if (typeof resource.id.deviceId != "undefined")
-    o.di = resource.id.deviceId;
+  if (typeof resource.deviceId != "undefined")
+    o.di = resource.deviceId;
 
-  if (typeof resource.id.path != "undefined")
-    link.href = resource.id.path;
+  if (typeof resource.resourcePath != "undefined")
+    link.href = resource.resourcePath;
 
   // TODO: collect all ...
   if (typeof resource.resourceTypes != "undefined" &&
@@ -29,10 +28,9 @@ exports.parseRes = function(payload) {
   return o;
 }
 
-exports.parseDevice = function(payload) {
-  console.log(payload);
+exports.parseDevice = function(device) {
+  console.log(device);
 
-  var device = payload.device;
   var o = {};
 
   if (typeof device.uuid != "undefined")
@@ -52,11 +50,10 @@ exports.parseDevice = function(payload) {
   return o;
 }
 
-exports.parsePlatform = function(platformInfo) {
+exports.parsePlatform = function(info) {
   var o = {};
 
-  console.log(platformInfo);
-  var info = platformInfo.platform;
+  console.log(info);
 
   if (typeof info.id != "undefined")
     o.pi = info.id;
