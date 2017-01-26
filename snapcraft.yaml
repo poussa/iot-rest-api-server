@@ -1,0 +1,18 @@
+name: iot-rest-api-server
+version: 0.1
+summary: REST API Server for OCF
+description: Node.js server for OCF REST APIs and OCF client functionality.
+confinement: strict
+grade: devel
+
+apps:
+  start-iot-rest-api-server:
+    command: node $SNAP/lib/node_modules/iot-rest-api-server/index.js --port 80
+    daemon: simple
+    plugs: [ network-bind ]
+
+parts:
+    meta-iot-web:
+        plugin: nodejs
+        source: https://github.com/01org/iot-rest-api-server.git
+        source-branch: master
