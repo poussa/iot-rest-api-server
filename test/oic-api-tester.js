@@ -13,6 +13,7 @@ var options = {
     obs: false
 };
 
+const okStatusCode = 200; // All right
 const usage = "usage: node oic-api-tester.js [options]\n" +
 "options: \n" +
 "  -?, --help \n" +
@@ -97,8 +98,12 @@ function findResources(callback) {
 		});
 
 		res.on('end', function() {
-			var resources = JSON.parse(json);
-			callback(resources);
+			if (res.statusCode == okStatusCode) {
+				var resources = JSON.parse(json);
+				callback(resources);
+			} else {
+				console.log(json.toString('utf8') );
+			}
 		});
 	}
 	var req = proto.request(reqOptions, discoveryCallback);
@@ -122,7 +127,7 @@ function onResourceFound(resources) {
 
 function onResource(resource) {
 	console.log("--- onResource:");
-	console.log(resource);
+	console.log(resource.toString('utf8'));
 }
 
 function retrieveResources(uri, callback, observe) {
@@ -134,7 +139,7 @@ function retrieveResources(uri, callback, observe) {
 	resourceCallback = function(res) {
 		res.on('data', function(data) {
 			if (observe) {
-				callback(JSON.parse(data));
+				callback(data);
 			}
 			else {
 				json += data;
@@ -143,7 +148,7 @@ function retrieveResources(uri, callback, observe) {
 
 		res.on('end', function() {
 			if (json)
-			    callback(JSON.parse(json));
+			    callback(json);
 		});
 
 		res.on('abort', function() {
