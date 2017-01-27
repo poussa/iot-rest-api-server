@@ -1,0 +1,8 @@
+# Snapcraft build artefacts
+parts/
+prime/
+stage/
+*.snap
+
+# Also ignore node modules installed
+node_modules/
