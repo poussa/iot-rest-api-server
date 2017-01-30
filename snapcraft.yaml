@@ -1,5 +1,5 @@
 name: iot-rest-api-server
-version: 0.1
+version: 0.2
 summary: REST API Server for OCF
 description: Node.js server for OCF REST APIs and OCF client functionality.
 confinement: strict
@@ -11,9 +11,23 @@ apps:
     daemon: simple
     plugs: [ network-bind ]
 
+  hciconfig:
+    command: bin/hciconfig
+    plugs: [ bluez, bluetooth-control ]
+
+  rfkill:
+    command: usr/sbin/rfkill
+    plugs: [ network-control ]
+
 parts:
     meta-iot-web:
         plugin: nodejs
         source: https://github.com/01org/iot-rest-api-server.git
         source-branch: master
         build-packages: [git, scons, libtool, autoconf, valgrind, doxygen, wget, unzip, libboost-dev, libboost-program-options-dev, libboost-thread-dev, uuid-dev, libexpat1-dev, libglib2.0-dev]
+
+    ubuntu:
+        plugin: nil
+        stage-packages:
+            - rfkill          # provides /usr/sbin/rfkill
+            - bluez           # provides /bin/hciconfig
