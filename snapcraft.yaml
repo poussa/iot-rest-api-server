@@ -1,5 +1,5 @@
 name: iot-rest-api-server
-version: 0.2
+version: 0.3
 summary: REST API Server for OCF
 description: Node.js server for OCF REST APIs and OCF client functionality.
 confinement: strict
@@ -13,6 +13,10 @@ apps:
 
   hciconfig:
     command: bin/hciconfig
+    plugs: [ bluez, bluetooth-control ]
+
+  hcitool:
+    command: usr/bin/hcitool
     plugs: [ bluez, bluetooth-control ]
 
   rfkill:
