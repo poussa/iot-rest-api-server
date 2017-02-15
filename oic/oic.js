@@ -4,6 +4,7 @@ exports.parseRes = function(resource) {
   var o = {}; // resource object according to the OIC core spec.
   var link = {};
   var links = [];
+  var p = {}; // Policy Parameter.
 
   if (typeof resource.deviceId != "undefined")
     o.di = resource.deviceId;
@@ -19,6 +20,18 @@ exports.parseRes = function(resource) {
   if (typeof resource.interfaces != "undefined" &&
       typeof resource.interfaces[0] != "undefined")
     link.if = resource.interfaces[0];
+
+  if (resource.discoverable || resource.observable) {
+    p.bm = (0 | (resource.discoverable ? 1 << 0 : 0) |
+           (resource.observable ? 1 << 1 : 0));
+  }
+
+  p.secure = resource.secure;
+
+  if (typeof resource.port != "undefined")
+    p.port = resource.port;
+
+  link.p = p;
 
   links.push(link);
   o.links = links;

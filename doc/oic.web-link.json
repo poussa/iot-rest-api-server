@@ -21,6 +21,22 @@
       "type": "string",
       "description": "Interface - The interfaces supported by the resource referenced by the target URI"
     },
+    "p": {
+      "readOnly": true,
+      "description": "JSON object containing a Bitmap indicating observable and discoverable plus security and port",
+      "type": "object",
+      "properties": {
+        "bm": {
+          "type": "integer"
+        },
+        "sec": {
+          "type": "boolean"
+        },
+        "port": {
+          "type": "integer"
+        }
+      }
+    },
     "obs": {
       "type": "boolean",
       "description": "Specifies if the resource referenced by the target URIis observable or not",
