@@ -12,14 +12,11 @@ exports.parseRes = function(resource) {
   if (typeof resource.resourcePath != "undefined")
     link.href = resource.resourcePath;
 
-  // TODO: collect all ...
-  if (typeof resource.resourceTypes != "undefined" &&
-      typeof resource.resourceTypes[0] != "undefined")
-    link.rt = resource.resourceTypes[0];
+  if (typeof resource.resourceTypes != "undefined")
+    link.rt = resource.resourceTypes;
 
-  if (typeof resource.interfaces != "undefined" &&
-      typeof resource.interfaces[0] != "undefined")
-    link.if = resource.interfaces[0];
+  if (typeof resource.interfaces != "undefined")
+    link.if = resource.interfaces;
 
   if (resource.discoverable || resource.observable) {
     p.bm = (0 | (resource.discoverable ? 1 << 0 : 0) |
