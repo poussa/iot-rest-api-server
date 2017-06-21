@@ -250,7 +250,7 @@ var routes = function(req, res) {
                 resourcePath: req.path,
                 properties: JSON.parse(body)
             };
-            console.log("PUT %s: %s", req.originalUrl, JSON.stringify(resource));
+            console.log("POST %s: %s", req.originalUrl, JSON.stringify(resource));
             DEV.update(resource).then(
                 function() {
                     res.statusCode = noContentStatusCode;
