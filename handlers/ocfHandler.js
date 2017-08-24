@@ -102,8 +102,15 @@ var routes = function(req, res) {
         discoveredResources.length = 0;
         DEV.on(RESOURCE_FOUND_EVENT, onResourceFound);
 
+        var options = {};
+        if (typeof req.query.di != "undefined")
+            options.deviceId = req.query.di;
+
+        if (typeof req.query.rt != "undefined")
+            options.resourceType = req.query.rt;
+
         console.log("Discovering resources for %d seconds.", timeoutValue/1000);
-        DEV.findResources().then(function() {
+        DEV.findResources(options).then(function() {
             // TODO: should we send in-progress back to http-client
             console.log("findResources() successful");
         })
