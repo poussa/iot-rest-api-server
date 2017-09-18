@@ -6,3 +6,6 @@ stage/
 
 # Also ignore node modules installed
 node_modules/
+
+# Ignore vim files
+*.swp
