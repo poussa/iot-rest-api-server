@@ -5,13 +5,16 @@
   "repository": "https://github.com/01org/iot-rest-api-server",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "bin/iot-rest-api-server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Sakari Poussa",
   "license": "Apache-2.0",
   "dependencies": {
     "iotivity-node": "^1.3.0-0"
+  },
+  "bin": {
+    "iot-rest-api-server": "bin/iot-rest-api-server.js"
   },
   "devDependencies": {
     "gulp": "^3.8.11",
