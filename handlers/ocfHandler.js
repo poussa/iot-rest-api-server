@@ -1,5 +1,5 @@
 var OIC = require('../oic/oic');
-var DEV = require('iotivity-node').client;
+var device = require('iotivity-node');
 
 const RESOURCE_FOUND_EVENT = "resourcefound";
 const RESOURCE_UPDATE_EVENT = "update";
@@ -17,6 +17,20 @@ const noContentStatusCode = 204; // No content
 const internalErrorStatusCode = 500; // Internal error
 const badRequestStatusCode = 400; // Bad request
 const notFoundStatusCode = 404; // Not found
+
+device.device = Object.assign(device.device, {
+    name: 'IoT REST API Server',
+    coreSpecVersion: 'ocf.1.1.0',
+    dataModels: ["ocf.res.1.1.0", "ocf.sh.1.1.0"]
+});
+
+device.platform = Object.assign(device.platform, {
+    manufacturerName: 'Intel',
+    manufactureDate: new Date('Tue Sep 19 14:41:28 (EET) 2017'),
+    platformVersion: '1.1.0'
+});
+
+var DEV = device.client;
 
 // Error handler
 function errorHandler(error) {

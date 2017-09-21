@@ -52,8 +52,8 @@ exports.parseDevice = function(device) {
   if (typeof device.coreSpecVersion != "undefined")
     o.icv = device.coreSpecVersion;
 
-  if (typeof device.dataModelVersion != "undefined")
-    o.dmv = device.dataModelVersion;
+  if (typeof device.dataModels != "undefined")
+    o.dmv = device.dataModels;
 
   console.log(JSON.stringify(o));
 
