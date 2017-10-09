@@ -205,8 +205,7 @@ var routes = function(req, res) {
                 var json = OIC.parseResource(resource);
                 res.write(json);
             } else {
-                if (resource.observable)
-                    resource.removeListener(RESOURCE_UPDATE_EVENT, observer);
+                resource.removeListener(RESOURCE_UPDATE_EVENT, observer);
                 resource.removeListener(RESOURCE_DELETE_EVENT, deleteHandler);
                 resource.removeListener(RESOURCE_ERROR_EVENT, errorHandler);
             }
@@ -224,18 +223,16 @@ var routes = function(req, res) {
                 if (req.query.obs != "undefined" && req.query.obs == true) {
                     req.on('close', function() {
                         console.log("Client: close");
-                        if (resource.observable)
-                            resource.removeListener(RESOURCE_UPDATE_EVENT, observer);
+                        resource.removeListener(RESOURCE_UPDATE_EVENT, observer);
                         resource.removeListener(RESOURCE_DELETE_EVENT, deleteHandler);
                         resource.removeListener(RESOURCE_ERROR_EVENT, errorHandler);
                         req.query.obs = false;
                     });
                     res.writeHead(okStatusCode, {'Content-Type':'application/json'});
                     req.setTimeout(socketTimeoutValue);
-                    if (resource.observable)
-                        resource.on(RESOURCE_UPDATE_EVENT, observer);
-                     resource.on(RESOURCE_DELETE_EVENT, deleteHandler);
-                     resource.on(RESOURCE_ERROR_EVENT, errorHandler);
+                    resource.on(RESOURCE_UPDATE_EVENT, observer);
+                    resource.on(RESOURCE_DELETE_EVENT, deleteHandler);
+                    resource.on(RESOURCE_ERROR_EVENT, errorHandler);
                 } else {
                     var json = OIC.parseResource(resource);
                     res.writeHead(okStatusCode, {'Content-Type':'application/json'});
