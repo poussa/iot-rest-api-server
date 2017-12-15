@@ -84,11 +84,6 @@ var routes = function(req, res) {
     }
 
     function onPlatformFound(platformInfo) {
-        // Do not add platform to the list, if we have already seen it.
-        for (index in discoveredPlatforms) {
-             if (platformInfo.id === discoveredPlatforms[index].pi)
-                 return;
-        }
         var platform = OIC.parsePlatform(platformInfo);
         discoveredPlatforms.push(platform);
     }
