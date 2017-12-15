@@ -55,6 +55,9 @@ exports.parseDevice = function(device) {
   if (typeof device.dataModels != "undefined")
     o.dmv = device.dataModels;
 
+  if (typeof device.piid != "undefined")
+    o.piid = device.piid;
+
   console.log(JSON.stringify(o));
 
   return o;
