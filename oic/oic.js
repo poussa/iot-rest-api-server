@@ -28,6 +28,15 @@ exports.parseRes = function(resource) {
 
   o.p = p;
 
+  if (typeof resource.endpoints != "undefined") {
+    o.eps = resource.endpoints.map(function epRepresentation(item) {
+      return {
+        ep: item.origin,
+        pri: item.priority
+      };
+    });
+  }
+
   console.log(JSON.stringify(o));
 
   return o;
