@@ -2,7 +2,6 @@ var OIC = require('../oic/oic');
 var device = require('iotivity-node');
 
 const RESOURCE_FOUND_EVENT = "resourcefound";
-const RESOURCE_UPDATE_EVENT = "update";
 const RESOURCE_DELETE_EVENT = "delete";
 const RESOURCE_ERROR_EVENT = "error";
 const DEVICE_FOUND_EVENT = "devicefound";
@@ -185,7 +184,6 @@ var routes = function(req, res) {
     }
 
     function handleResourceGet(req, res) {
-
         if (typeof req.query.di == "undefined") {
             res.writeHead(badRequestStatusCode, {'Content-Type':'text/plain'})
             res.end("Query parameter \"di\" is missing.");
@@ -200,7 +198,7 @@ var routes = function(req, res) {
                 var json = OIC.parseResource(resource);
                 res.write(json);
             } else {
-                resource.removeListener(RESOURCE_UPDATE_EVENT, observer);
+                DEV.retrieve(resource, observer, true);
                 resource.removeListener(RESOURCE_DELETE_EVENT, deleteHandler);
                 resource.removeListener(RESOURCE_ERROR_EVENT, errorHandler);
             }
@@ -213,19 +211,26 @@ var routes = function(req, res) {
             }
         }
 
-        DEV.retrieve({deviceId: req.query.di, resourcePath: req.path}, req.query).then(
+        var ep = {};
+        if (typeof req.query.ep != "undefined")
+            ep.origin = req.query.ep;
+
+        if (typeof req.query.pri != "undefined")
+            ep.priority = parseInt(req.query.pri);
+
+        DEV.retrieve({deviceId: req.query.di, resourcePath: req.path, endpoint: ep}, req.query).then(
             function(resource) {
                 if (req.query.obs != "undefined" && req.query.obs == true) {
                     req.on('close', function() {
                         console.log("Client: close");
-                        resource.removeListener(RESOURCE_UPDATE_EVENT, observer);
+                        DEV.retrieve(resource, observer, true);
                         resource.removeListener(RESOURCE_DELETE_EVENT, deleteHandler);
                         resource.removeListener(RESOURCE_ERROR_EVENT, errorHandler);
                         req.query.obs = false;
                     });
                     res.writeHead(okStatusCode, {'Content-Type':'application/json'});
                     req.setTimeout(socketTimeoutValue);
-                    resource.on(RESOURCE_UPDATE_EVENT, observer);
+                    DEV.retrieve(resource, observer);
                     resource.on(RESOURCE_DELETE_EVENT, deleteHandler);
                     resource.on(RESOURCE_ERROR_EVENT, errorHandler);
                 } else {
@@ -258,10 +263,18 @@ var routes = function(req, res) {
             body.push(chunk);
         }).on('end', function() {
             body = Buffer.concat(body).toString();
+            var ep = {};
+            if (typeof req.query.ep != "undefined")
+                ep.origin = req.query.ep;
+
+            if (typeof req.query.pri != "undefined")
+                ep.priority = parseInt(req.query.pri);
+
             var resource = {
                 deviceId: req.query.di,
                 resourcePath: req.path,
-                properties: JSON.parse(body)
+                properties: JSON.parse(body),
+                endpoint: ep
             };
             console.log("POST %s: %s", req.originalUrl, JSON.stringify(resource));
             DEV.update(resource).then(
