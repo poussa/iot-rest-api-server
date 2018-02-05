@@ -69,8 +69,9 @@ if (Number.isInteger(options.port) == false) {
 var httpsOptions = {key: null, cert: null};
 if (options.https == true) {
     fs = require('fs');
-    httpsOptions.key = fs.readFileSync(path.join(__dirname, 'config', 'private.key'));
-    httpsOptions.cert = fs.readFileSync(path.join(__dirname, 'config', 'certificate.pem'));
+    var configPath = path.resolve(path.join(__dirname, "..", "config"));
+    httpsOptions.key = fs.readFileSync(path.join(configPath, 'private.key'));
+    httpsOptions.cert = fs.readFileSync(path.join(configPath, 'certificate.pem'));
 }
 
 rest.server.use("/api/oic", rest.ocf);
