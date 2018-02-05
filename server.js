@@ -13,11 +13,11 @@ function start(config, options) {
     }
     if (config.https) {
         https = require('https');
-        https.createServer(options, onRequest).listen(config.port);
+        https.createServer(options, onRequest).listen(config.port, '127.0.0.1');
     }
     else {
         http = require('http');
-        http.createServer(onRequest).listen(config.port);
+        http.createServer(onRequest).listen(config.port, '127.0.0.1');
     }
     console.log("API server started on " + new Date().toISOString()
         + " [port: " + config.port + ", https: " + config.https + "]");

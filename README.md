@@ -177,8 +177,12 @@ OBSERVE operations
 
 ## Tips
 
-If you are running Chrome and want to see the JSON objects in nicely formatted
+- If you are running Chrome and want to see the JSON objects in nicely formatted
 way, install the JSONView extension.
 
-Another great tool for REST API development and testing is Postman, another
+- Another great tool for REST API development and testing is Postman, another
 Chrome extension.
+
+- By default, the REST API server listens only on localhost interface, so no outside
+entity will be able to interact with it. In case if you want to expose the API to
+outside, you can use a reverse proxy server (e.g., NGNIX).
