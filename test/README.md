@@ -20,19 +20,19 @@
 # Platform discovery (/oic/p)
 ./oic-get "/p"
 
-# Resource get (/a/light?di=<Device ID>)
-./oic-get "/a/light?di=<di>"
+# Resource get (/a/light?di=<Device ID>&ep=<Origin of the resource>&pri=<Priority of the endpoint>)
+./oic-get "/a/light?di=<di>&ep=<Origin of the resource>&pri=<Priority of the endpoint>"
 
-# Resource get with query filter (/a/light?di=<Device ID> with power less than 50)
-./oic-get "/a/light?di=?di=<di>&power<50"
+# Resource get with query filter (/a/light?di=<Device ID>&ep=<Origin of the resource>&pri=<Priority of the endpoint> with power less than 50)
+./oic-get "/a/light?di=?di=<di>&ep=<Origin of the resource>&pri=<Priority of the endpoint>&power<50"
 
-# Resource observe (/a/light?di=<Device ID>&obs=1)
-./oic-get "/a/light?di=<di>&obs=1"
+# Resource observe (/a/light?di=<Device ID>&obs=1&ep=<Origin of the resource>&pri=<Priority of the endpoint>)
+./oic-get "/a/light?di=<di>&obs=1&ep=<Origin of the resource>&pri=<Priority of the endpoint>"
 ```
 
 ### oic-post
 
 ```sh
-# Resource post (/a/light?di=<Device ID> from a file: post-light-values.txt)
-./oic-post "/a/light?di=<di>"
+# Resource post (/a/light?di=<Device ID&ep=<Origin of the resource>&pri=<Priority of the endpoint> from a file: post-light-values.txt)
+./oic-post "/a/light?di=<di>&ep=<Origin of the resource>&pri=<Priority of the endpoint>"
 ```
