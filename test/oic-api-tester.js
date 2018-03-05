@@ -115,13 +115,34 @@ function findResources(callback) {
 	req.end();
 }
 
+// Look for the secure endpoint first and return if it is found.
+// Otherwise, return the first item in the endpoints list.
+function pickEndpoint(endpoints) {
+	var index, isSecureEndpoint;
+
+	for (index in endpoints) {
+		if (endpoints[index].ep.substr(0, 5) === "coaps") {
+			return endpoints[index];
+		}
+	}
+
+	if (endpoints.length > 0)
+		return endpoints[0];
+}
+
 function onResourceFound(resources) {
 	console.log("--- onResourceFound:");
 
 	for (var i = 0; i < resources.length; i++) {
-		var uri = resources[i].links[0].href;
+
+		var uri = resources[i].href;
 		console.log("%s : %s", resources[i].di, uri);
-		retrieveResources(uri + "?di=" + resources[i].di, onResource, options.obs);
+		var endPoint = pickEndpoint(resources[i].eps);
+		if (typeof endPoint != "undefined") {
+			retrieveResources(uri + "?di=" + resources[i].di +
+				"&ep=" + endPoint.ep + "&pri=" +
+				endPoint.pri, onResource, options.obs);
+		}
 	}
 }
 
