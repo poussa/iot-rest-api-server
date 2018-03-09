@@ -146,10 +146,10 @@ and `API_SERVER_PORT` are used to construct the authority part of the URL.
 export API_SERVER_HOST=10.211.55.3
 # Discover
 ./test/oic-get /res
-# Retrieve (href and di are from the discovery above)
-./test/oic-get <href>?di=<di>
+# Retrieve (href, di, ep and pri are from the discovery above)
+./test/oic-get <href>?di=<di>&ep=<ep>&pri=<pri>
 # Observe
-./test/oic-get <href>?di=<di>&obs=1
+./test/oic-get <href>?di=<di>&ep=<ep>&pri=<pri>&obs=1
 ```
 
 ### oic-post
@@ -161,7 +161,7 @@ with the properties that are being set.
 
 ```
 API_SERVER_HOST=10.211.55.3
-./test/oic-post  <href>?di=<di> <file-name-for-body>
+./test/oic-post  <href>?di=<di>&ep=<ep>&pri=<pri> <file-name-for-body>
 ```
 
 ### oic-api-tester
