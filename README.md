@@ -1,3 +1,5 @@
+# This repository will be discontinued at the end on Jan 2019
+
 # IoT REST API Server
 
 ## Description
